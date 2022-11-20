@@ -1,25 +1,6 @@
 <template>
   <v-col>
-    <v-row>
-      <v-chip-group mandatory active-class="primary--text" :value="0">
-        <v-chip label>
-          <v-icon class="mr-2">mdi-wrench-cog</v-icon>
-          Конструктор
-        </v-chip>
-
-        <v-chip label>
-          <v-icon class="mr-2">mdi-code-tags</v-icon>
-          SQL код
-        </v-chip>
-      </v-chip-group>
-
-      <v-spacer></v-spacer>
-
-      <v-btn class="mx-2 mt-2" text small>
-        <v-icon class="mr-2">mdi-arrow-collapse</v-icon>
-        Свернуть ноды
-      </v-btn>
-    </v-row>
+    <ButtonsVue />
 
     <v-layout
       align-content-center
@@ -27,6 +8,7 @@
       align-center
       fill-height
       style="width: 100%; height: 200px; position: relative"
+      class="mt-5"
     >
       <v-row align="center" style="max-width: 40rem">
         <v-alert elevation="2">
@@ -60,51 +42,26 @@
           <span style="color: black">Эти элементы называются “ноды”</span>
         </v-tooltip>
       </v-row>
-
-      <v-btn
-        fab
-        absolute
-        bottom
-        left
-        color="rgba(0, 0, 0, 0.25);"
-        elevation="0"
-        small
-      >
-        <v-icon> mdi-plus </v-icon>
-      </v-btn>
     </v-layout>
 
+    <Table />
+
     <HelpDialog @started="start" />
-
-    <TableVue className="rounded-t-xl">
-      <v-alert color="grey" elevation="0" class="rounded-0 rounded-t-xl mt-2" dark>
-        <v-row align="center" class="px-3">
-          <v-btn fab x-small elevation="0" class="mr-2" color="white">
-            <v-icon color="grey"> mdi-help </v-icon>
-          </v-btn>
-
-          <span>Данные преобразованы</span>
-
-          <v-spacer></v-spacer>
-
-          <span>Раскрыть преобразование</span>
-          <v-icon>mdi-menu-up</v-icon>
-        </v-row>
-      </v-alert>
-    </TableVue>
   </v-col>
 </template>
 
 <script>
 import HelpDialog from "@/views/helps/HelpMenu2.vue";
-import TableVue from "./Table.vue";
+import ButtonsVue from "./ButtonsRow.vue"
+import Table from "./Table";
 
 export default {
   name: "Page2Vue",
 
   components: {
     HelpDialog,
-    TableVue,
+    Table,
+    ButtonsVue
   },
 
   methods: {

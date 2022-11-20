@@ -19,7 +19,7 @@
 
       <v-col>
         <v-row justify="center">
-          <div class="icon">
+          <div class="icon" @click="$router.push({ name: 'flow22' })">
             <svg
               width="32"
               height="24"

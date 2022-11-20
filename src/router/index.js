@@ -38,6 +38,11 @@ const routes = [
         name: 'flow21',
         component: () => import(/* webpackChunkName: "flow2" */ '@/views/flow2/Page1.vue'),
       },
+      {
+        path: '/flow2/nodes',
+        name: 'flow22',
+        component: () => import(/* webpackChunkName: "flow2" */ '@/views/flow2/Page2.vue'),
+      },
     ],
   }
 ]
