@@ -38,11 +38,8 @@ export default {
         },
 
         thirdClicked() {
-            if (Math.random() < 0.5) {
-                this.$router.push({ name: "flow11" })
-            } else {
-                this.$router.push({ name: "flow21" })
-            }
+            this.thirdShow = false
+            this.$emit("finished")
         }
     }
 }

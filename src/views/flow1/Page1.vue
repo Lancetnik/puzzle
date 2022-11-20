@@ -1,5 +1,7 @@
 <template>
   <v-col>
+    <DialogGroupVue @finished="isDialogFinished=true" />
+
     <v-row>
       <v-btn class="mx-2" elevation="1">
         <v-icon class="mr-2">mdi-exit-to-app</v-icon>
@@ -24,7 +26,7 @@
       </v-btn>
     </v-row>
 
-    <HelpDialog @started="start"/>
+    <HelpDialog @started="start" v-if="isDialogFinished"/>
 
     <Table />
   </v-col>
@@ -32,6 +34,7 @@
 
 <script>
 import HelpDialog from "@/views/helps/HelpMenu1.vue"
+import DialogGroupVue from "../dialogs/DialogGroup.vue";
 import Table from "./Table.vue";
 
 export default {
@@ -39,8 +42,13 @@ export default {
 
   components: {
     HelpDialog,
-    Table
+    Table,
+    DialogGroupVue
   },
+
+  data: () => ({
+    isDialogFinished: false,
+  }),
 
   methods: {
     start() {

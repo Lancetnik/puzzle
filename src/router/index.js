@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RootPage from '@/views/RootPage'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'page1',
-    component: RootPage
+    beforeEnter: (to, from, next) => {
+      if (Math.random() < 0.5) next({ name: "flow11" })
+      else next({ name: "flow21" })
+    }
   },
   {
     path: '/flow1',
@@ -42,7 +43,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })
