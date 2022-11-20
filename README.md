@@ -1,4 +1,4 @@
-# erchule
+# Puzzle
 
 ## Project setup
 ```
