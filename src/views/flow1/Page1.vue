@@ -25,17 +25,21 @@
     </v-row>
 
     <HelpDialog @started="start"/>
+
+    <Table />
   </v-col>
 </template>
 
 <script>
 import HelpDialog from "@/views/helps/HelpMenu1.vue"
+import Table from "./Table.vue";
 
 export default {
   name: "Page1Vue",
 
   components: {
-    HelpDialog
+    HelpDialog,
+    Table
   },
 
   methods: {

@@ -1,37 +1,27 @@
 <template>
-    <v-dialog
-        :value="value"
-        width="500"
-        persistent
-      >
-        <v-card class="py-4">
-          <v-card-subtitle class="headline text-center py-2">
-            Привет!
-          </v-card-subtitle>
-  
-          <v-card-text class="text-center py-2 subtitle-1">
-            Спасибо, что согласился протестировать интерфейс!
-            <br />
-            Это не займет много времени.
-          </v-card-text>
-  
-          <v-card-actions class="justify-center">
-            <v-btn
-              color="primary"
-              width="15rem"
-              @click="$emit('clicked')"
-            >
-              Начать
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+  <DialogWrapperVue :value="value" @clicked="$emit('clicked')">
+    <v-card-subtitle class="headline text-center py-2">
+      Привет!
+    </v-card-subtitle>
+
+    <v-card-text class="text-center py-2 subtitle-1">
+      Спасибо, что согласился протестировать интерфейс!
+      <br />
+      Это не займет много времени.
+    </v-card-text>
+  </DialogWrapperVue>
 </template>
 
 <script>
-export default {
-    name: "FirstDialog",
+import DialogWrapperVue from "./DialogWrapper.vue";
 
-    props: ['value']
-}
+export default {
+  name: "FirstDialog",
+
+  props: ["value"],
+
+  components: {
+    DialogWrapperVue,
+  },
+};
 </script>
