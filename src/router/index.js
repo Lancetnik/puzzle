@@ -26,6 +26,11 @@ const routes = [
         name: 'flow12',
         component: () => import(/* webpackChunkName: "flow1" */ '@/views/flow1/Page2.vue'),
       },
+      {
+        path: '/flow1/added',
+        name: 'flow13',
+        component: () => import(/* webpackChunkName: "flow1" */ '@/views/flow1/Page3.vue'),
+      },
     ],
   },
   {
@@ -42,6 +47,11 @@ const routes = [
         path: '/flow2/nodes',
         name: 'flow22',
         component: () => import(/* webpackChunkName: "flow2" */ '@/views/flow2/Page2.vue'),
+      },
+      {
+        path: '/flow2/added',
+        name: 'flow23',
+        component: () => import(/* webpackChunkName: "flow2" */ '@/views/flow2/Page3.vue'),
       },
     ],
   }

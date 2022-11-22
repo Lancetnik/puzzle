@@ -2,7 +2,7 @@
   <v-col>
     <DialogGroupVue @finished="isDialogFinished = true" />
 
-    <ButtonsVue />
+    <ButtonsVue :go="() => {}"/>
 
     <Table />
 

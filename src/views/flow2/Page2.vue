@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <ButtonsVue />
+    <ButtonsVue :go="() => $router.push({ name: 'flow23' })"/>
 
     <v-layout
       align-content-center

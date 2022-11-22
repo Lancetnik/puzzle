@@ -40,21 +40,30 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="mx-2">
+          <v-btn class="mx-2" @click="success = $route.name === 'flow23'">
             <v-icon class="mr-2">mdi-eye</v-icon>
             SQL
           </v-btn>
         </v-row>
       </v-col>
+
+      <SuccessMenuVue :value="success" v-show="success" />
     </v-row>
   </v-app-bar>
 </template>
 
 <script>
+import SuccessMenuVue from '../SuccessMenu.vue';
+
 export default {
   name: "NavbarVue",
 
+  components: {
+    SuccessMenuVue
+  },
+
   data: () => ({
+    success: false,
     breadcrumbs: [
       {
         text: "Puzzle",

@@ -1,5 +1,7 @@
 <template>
   <v-col>
+    <SuccessMenuVue :value="success" v-show="success" :next-icon="null"/>
+
     <v-row>
       <v-chip-group mandatory active-class="primary--text" :value="0">
         <v-chip label>
@@ -7,7 +9,7 @@
           Конструктор
         </v-chip>
 
-        <v-chip label>
+        <v-chip label @click="success = true">
           <v-icon class="mr-2">mdi-code-tags</v-icon>
           SQL код
         </v-chip>
@@ -28,38 +30,34 @@
       fill-height
       style="width: 100%; height: 200px; position: relative"
     >
-      <v-row align="center" style="max-width: 40rem">
-        <v-alert elevation="2">
-          <v-icon left color="#81C785">mdi-server</v-icon>
-          CO2 Pollution
-        </v-alert>
+      <v-col style="max-width: 40rem">
+        <v-row align="center" style="max-width: 40rem">
+          <v-alert elevation="2">
+            <v-icon left color="#81C785">mdi-server</v-icon>
+            CO2 Pollution
+          </v-alert>
 
-        <v-divider color="#C7C9CC"></v-divider>
+          <v-divider color="#C7C9CC"></v-divider>
 
-        <v-alert
-          elevation="2"
-          colored-border
-          border="top"
-          color="#989898"
-          id="tooltiped"
-        >
-          <v-icon left color="#989898">mdi-exit-to-app</v-icon>
-          Оставить значение
-        </v-alert>
+          <v-alert
+            elevation="2"
+            colored-border
+            border="top"
+            color="#989898"
+            id="tooltiped"
+          >
+            <v-icon left color="#989898">mdi-exit-to-app</v-icon>
+            Оставить значение
+          </v-alert>
+        </v-row>
 
-        <v-tooltip
-          top
-          :value="true"
-          disabled
-          z-index="1"
-          nudge-right="60"
-          activator="#tooltiped"
-          color="rgba(112, 182, 246, 0.32)"
-          content-class="my-primary tooltip-top"
-        >
-          <span style="color: black">Эти элементы называются “ноды”</span>
-        </v-tooltip>
-      </v-row>
+        <v-row align="center" style="max-width: 40rem">
+          <v-alert elevation="2">
+            <v-icon left color="#81C785">mdi-server</v-icon>
+            Новый источник
+          </v-alert>
+        </v-row>
+      </v-col>
 
       <v-btn
         fab
@@ -69,7 +67,6 @@
         color="rgba(0, 0, 0, 0.25);"
         elevation="0"
         small
-        @click="$router.push({ name: 'flow13' })"
       >
         <v-icon> mdi-plus </v-icon>
       </v-btn>
@@ -78,7 +75,12 @@
     <HelpDialog @started="start" />
 
     <TableVue className="rounded-t-xl">
-      <v-alert color="grey" elevation="0" class="rounded-0 rounded-t-xl mt-2" dark>
+      <v-alert
+        color="grey"
+        elevation="0"
+        class="rounded-0 rounded-t-xl mt-2"
+        dark
+      >
         <v-row align="center" class="px-3">
           <v-btn fab x-small elevation="0" class="mr-2" color="white">
             <v-icon color="grey"> mdi-help </v-icon>
@@ -97,16 +99,22 @@
 </template>
 
 <script>
-import HelpDialog from "@/views/helps/HelpMenu2.vue";
+import HelpDialog from "@/views/helps/HelpMenu3.vue";
+import SuccessMenuVue from "../SuccessMenu.vue";
 import TableVue from "./Table.vue";
 
 export default {
-  name: "Page2Vue",
+  name: "Page3Vue",
 
   components: {
     HelpDialog,
     TableVue,
+    SuccessMenuVue
   },
+
+  data: () => ({
+    success: false
+  }),
 
   methods: {
     start() {

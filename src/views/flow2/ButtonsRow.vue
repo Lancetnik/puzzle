@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-btn class="mx-2" elevation="1" small>
+    <v-btn class="mx-2" elevation="1" small @click="go">
       <v-icon class="mr-2">mdi-plus</v-icon>
       Добавить источник
     </v-btn>
@@ -44,6 +44,13 @@
 
 <script>
 export default {
-  name: "ButtonsVue"
+  name: "ButtonsVue",
+
+  props: {
+    go: {
+      default: () => {},
+      required: false
+    }
+  }
 }
 </script>
