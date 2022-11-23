@@ -59,7 +59,6 @@ export default {
         "timestamp": time,
         "reading_for": Math.floor((time.getTime() - this.showStart.getTime()) / 1000),
       }
-      console.log(data)
       this.$metrika.reachGoal("btn_help_close", data)
 
       this.setClicked()
@@ -75,7 +74,6 @@ export default {
       const data = { 
         "timestamp": time
       }
-      console.log(data)
       this.$metrika.reachGoal("btn_help_open", data)
 
       this.setClicked()

@@ -122,7 +122,6 @@ export default {
           (time.getTime() - this.lastClick.getTime()) / 1000
         ),
       };
-      console.log(data);
       this.$metrika.reachGoal(id, data);
 
       this.setClicked();

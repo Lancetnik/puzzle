@@ -49,7 +49,6 @@ export default {
   methods: {
     clicked() {
       const data = { nps: this.estimation + 1 }
-      console.log(data)
       this.$metrika.reachGoal("btn_nps", data);
       this.finished = true;
     },

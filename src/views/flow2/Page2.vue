@@ -90,7 +90,6 @@ export default {
         "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
         "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
       }
-      console.log(data)
       this.$metrika.reachGoal("btn_source_finish", data)
 
       this.setClicked()
