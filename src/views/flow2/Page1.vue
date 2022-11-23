@@ -26,6 +26,10 @@ export default {
     ButtonsVue
   },
 
+  created() {
+    this.$metrika.params({"version": "new"})
+  },
+
   data: () => ({
     isDialogFinished: false,
   }),

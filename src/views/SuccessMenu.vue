@@ -2,7 +2,9 @@
   <v-dialog :value="value" width="50rem" persistent>
     <v-card class="py-4">
       <v-card-text class="text-center py-0">
-        <p>Спасибо большое за твоё время!<br /></p>
+        <p v-show="!finished">Супер, код найден!<br /></p>
+
+        <p>Спасибо большое за ваше время!<br /></p>
         <p v-show="!finished">
           Оцени, насколько тебе понравилось взаимодействовать с интерфейсом .
         </p>

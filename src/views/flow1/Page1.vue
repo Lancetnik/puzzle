@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <DialogGroupVue @finished="isDialogFinished=true" />
+    <DialogGroupVue @finished="isDialogFinished = true" />
 
     <v-row>
       <v-btn class="mx-2" elevation="1" small>
@@ -26,7 +26,7 @@
       </v-btn>
     </v-row>
 
-    <HelpDialog @started="start" v-if="isDialogFinished"/>
+    <HelpDialog @started="start" v-if="isDialogFinished" />
 
     <Table />
   </v-col>
@@ -44,6 +44,10 @@ export default {
     HelpDialog,
     Table,
     DialogGroupVue
+  },
+
+  created() {
+    this.$metrika.params({"version": "old"})
   },
 
   data: () => ({
