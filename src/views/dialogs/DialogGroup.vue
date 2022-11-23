@@ -8,6 +8,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia"
+import { useTimerStore } from "@/timer.store"
+
 import FirstDialog from "./Dialog1.vue"
 import SecondDialog from "./Dialog2.vue"
 import ThirdDialog from "./Dialog3.vue"
@@ -31,6 +34,8 @@ export default {
     }),
 
     methods: {
+        ...mapActions(useTimerStore, ["setStarted", "setClicked"]),
+
         firtsClicked() {
             this.firstShow = false
             this.secondShow = true
@@ -48,6 +53,11 @@ export default {
 
         fourthClicked() {
             this.fourthShow = false
+
+            this.setClicked()
+            this.setStarted()
+            this.$metrika.reachGoal("btn_start", { "timestamp": new Date() })
+
             this.$emit('finished')
         }
     }

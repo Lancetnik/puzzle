@@ -2,7 +2,7 @@
   <v-col>
     <DialogGroupVue @finished="isDialogFinished = true" />
 
-    <ButtonsVue :go="() => {}"/>
+    <ButtonsVue :go="false"/>
 
     <Table />
 
@@ -11,6 +11,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import Table from "./Table";
 import DialogGroupVue from "../dialogs/DialogGroup.vue";
 import ButtonsVue from "./ButtonsRow.vue"
@@ -35,8 +38,10 @@ export default {
   }),
 
   methods: {
+    ...mapActions(useTimerStore, ["setStepStart"]),
+
     start() {
-      console.log("started");
+      this.setStepStart()
     },
   },
 };

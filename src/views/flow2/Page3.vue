@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <ButtonsVue :go="() => {}"/>
+    <ButtonsVue :go="false"/>
 
     <v-layout
       align-content-center
@@ -47,6 +47,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpDialog from "@/views/helps/HelpMenu3.vue";
 import ButtonsVue from "./ButtonsRow.vue";
 import Table from "./Table";
@@ -61,8 +64,10 @@ export default {
   },
 
   methods: {
+    ...mapActions(useTimerStore, ["setClicked", "setStepStart"]),
+
     start() {
-      console.log("started");
+      this.setStepStart()
     },
   },
 };

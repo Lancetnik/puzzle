@@ -7,7 +7,7 @@
           Конструктор
         </v-chip>
 
-        <v-chip label>
+        <v-chip label @click="clickWrong">
           <v-icon class="mr-2">mdi-code-tags</v-icon>
           SQL код
         </v-chip>
@@ -69,7 +69,7 @@
         color="rgba(0, 0, 0, 0.25);"
         elevation="0"
         small
-        @click="$router.push({ name: 'flow13' })"
+        @click="finishStep"
       >
         <v-icon> mdi-plus </v-icon>
       </v-btn>
@@ -97,6 +97,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpDialog from "@/views/helps/HelpMenu2.vue";
 import TableVue from "./Table.vue";
 
@@ -108,10 +111,49 @@ export default {
     TableVue,
   },
 
+  data: () => ({
+    actionStartTime: new Date()
+  }),
+
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+  },
+
   methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
     start() {
-      console.log("started");
+      this.actionStartTime = new Date()
     },
+
+    clickWrong() {
+      const time = new Date();
+      const data = {
+        timestamp: time,
+        from_start: Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
+      };
+      console.log(data);
+      this.$metrika.reachGoal("btn_sql", data);
+
+      this.setClicked();
+    },
+
+    finishStep() {
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "from_action_start": Math.floor((time.getTime() - this.actionStartTime.getTime()) / 1000),
+        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_source_finish", data)
+
+      this.setClicked()
+
+      this.$router.push({ name: 'flow13' })
+    }
   },
 };
 </script>

@@ -9,7 +9,7 @@
           Конструктор
         </v-chip>
 
-        <v-chip label @click="success = true">
+        <v-chip label @click="finishFlow">
           <v-icon class="mr-2">mdi-code-tags</v-icon>
           SQL код
         </v-chip>
@@ -99,6 +99,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpDialog from "@/views/helps/HelpMenu3.vue";
 import SuccessMenuVue from "../SuccessMenu.vue";
 import TableVue from "./Table.vue";
@@ -113,13 +116,37 @@ export default {
   },
 
   data: () => ({
-    success: false
+    success: false,
+
+    actionStartTime: new Date()
   }),
 
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+  },
+
   methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+  
     start() {
-      console.log("started");
+      this.actionStartTime = new Date()
     },
+
+    finishFlow() {
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "from_action_start": Math.floor((time.getTime() - this.actionStartTime.getTime()) / 1000),
+        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_sql_finish", data)
+
+      this.setClicked()
+
+      this.success = true
+    }
   },
 };
 </script>

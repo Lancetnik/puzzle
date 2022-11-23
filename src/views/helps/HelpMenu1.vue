@@ -1,5 +1,5 @@
 <template>
-  <HelpMenuWrapper @started="$emit('started')">
+  <HelpMenuWrapper @started="clicked">
     <p>
       Перед вами интерфейс для аналитиков. Для каждого столбца вы можете делать
       различные преобразования. Например, отсортировать значения по возрастанию.
@@ -257,6 +257,9 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpMenuWrapper from "./HelpMenuWrapper.vue";
 
 export default {
@@ -264,6 +267,29 @@ export default {
 
   components: {
     HelpMenuWrapper,
+  },
+
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+  },
+
+  methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
+    clicked() {
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_node_start", data)
+
+      this.setClicked()
+    
+      this.$emit('started')
+    },
   },
 };
 </script>

@@ -9,8 +9,18 @@
           Оцени, насколько тебе понравилось взаимодействовать с интерфейсом .
         </p>
 
-        <v-btn-toggle v-model="estimation" v-show="!finished" borderless active-class="none">
-          <v-btn v-for="(i, j) in new Array(10)" :key="j" :color="j == estimation ? 'primary' : ''" active-class="none">
+        <v-btn-toggle
+          v-model="estimation"
+          v-show="!finished"
+          borderless
+          active-class="none"
+        >
+          <v-btn
+            v-for="(i, j) in new Array(10)"
+            :key="j"
+            :color="j == estimation ? 'primary' : ''"
+            active-class="none"
+          >
             {{ j + 1 }}
           </v-btn>
         </v-btn-toggle>
@@ -38,7 +48,9 @@ export default {
 
   methods: {
     clicked() {
-      console.log(this.estimation + 1);
+      const data = { nps: this.estimation + 1 }
+      console.log(data)
+      this.$metrika.reachGoal("btn_nps", data);
       this.finished = true;
     },
   },

@@ -3,15 +3,15 @@
     <v-row justify="space-between" align="center">
       <v-col>
         <v-row justify="start" align="center">
-          <v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click="() => clickWrong('btn_menu')">
             <v-icon>mdi-menu</v-icon>
           </v-app-bar-nav-icon>
 
-          <v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click="() => clickWrong('btn_logo')">
             <v-icon>mdi-puzzle-outline</v-icon>
           </v-app-bar-nav-icon>
 
-          <v-breadcrumbs :items="breadcrumbs" large dark></v-breadcrumbs>
+          <v-breadcrumbs :items="breadcrumbs" large dark @click="() => clickWrong('btn_puzzle')"></v-breadcrumbs>
 
           <v-icon> mdi-menu-down </v-icon>
         </v-row>
@@ -19,7 +19,7 @@
 
       <v-col>
         <v-row justify="center">
-          <div class="icon" @click="$router.push({ name: 'flow22' })">
+          <div class="icon" @click="stepFinish">
             <svg
               width="32"
               height="24"
@@ -74,7 +74,7 @@
 
       <v-col>
         <v-row justify="end">
-          <v-btn class="mx-2">
+          <v-btn class="mx-2" @click="() => clickWrong('btn_actions')">
             <v-icon class="mr-2">mdi-eye</v-icon>
             SQL
           </v-btn>
@@ -85,6 +85,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 export default {
   name: "NavbarVue",
 
@@ -100,6 +103,43 @@ export default {
       },
     ],
   }),
+
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime", "stepStart"]),
+  },
+
+  methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
+    clickWrong(id) {
+      const time = new Date();
+      const data = {
+        timestamp: time,
+        from_start: Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
+      };
+      console.log(data);
+      this.$metrika.reachGoal(id, data);
+
+      this.setClicked();
+    },
+
+    stepFinish() {
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "from_action_start": Math.floor((time.getTime() - this.stepStart.getTime()) / 1000),
+        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_source_finish", data)
+
+      this.setClicked()
+
+      this.$router.push({ name: 'flow22' })
+    }
+  }
 };
 </script>
 

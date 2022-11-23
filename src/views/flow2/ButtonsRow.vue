@@ -1,16 +1,16 @@
 <template>
   <v-row>
-    <v-btn class="mx-2" elevation="1" small @click="go">
+    <v-btn class="mx-2" elevation="1" small @click="calling">
       <v-icon class="mr-2">mdi-plus</v-icon>
       Добавить источник
     </v-btn>
 
-    <v-btn class="mx-2" elevation="1" small>
+    <v-btn class="mx-2" elevation="1" small @click="clickWrong">
       <v-icon class="mr-2">mdi-set-center</v-icon>
       Объединение
     </v-btn>
 
-    <v-btn class="mx-2" elevation="1" small>
+    <v-btn class="mx-2" elevation="1" small @click="clickWrong">
       <svg
         width="16"
         height="16"
@@ -30,12 +30,12 @@
       Группировка
     </v-btn>
 
-    <v-btn class="mx-2" elevation="1" small>
+    <v-btn class="mx-2" elevation="1" small @click="clickWrong">
       <v-icon class="mr-2">mdi-filter-outline</v-icon>
       Фильтрация
     </v-btn>
 
-    <v-btn class="mx-2" elevation="1" small>
+    <v-btn class="mx-2" elevation="1" small @click="clickWrong">
       <v-icon class="mr-2">mdi-sort-reverse-variant</v-icon>
       Сортировка
     </v-btn>
@@ -43,14 +43,47 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 export default {
   name: "ButtonsVue",
 
   props: {
     go: {
-      default: () => {},
+      default: false,
       required: false
     }
+  },
+
+  data: () => ({
+    calling: null,
+  }),
+
+  created() {
+    if (this.go === false) this.calling = this.clickWrong
+    else this.calling = this.go
+  },
+
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+  },
+
+  methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
+    clickWrong() {
+      const time = new Date();
+      const data = {
+        timestamp: time,
+        from_start: Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
+      };
+      console.log(data);
+      this.$metrika.reachGoal("btn_actions", data);
+
+      this.setClicked();
+    },
   }
 }
 </script>

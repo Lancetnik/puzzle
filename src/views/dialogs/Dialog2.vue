@@ -34,7 +34,7 @@ export default {
   methods: {
     clicked() {
       if (10 < Number(this.age) && Number(this.age) < 70) {
-        this.$metrika.params({ age: this.age });
+        this.$metrika.params({ "age": this.age });
         this.$emit("clicked");
       }
     },

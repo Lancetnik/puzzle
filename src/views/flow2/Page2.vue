@@ -1,6 +1,6 @@
 <template>
   <v-col>
-    <ButtonsVue :go="() => $router.push({ name: 'flow23' })"/>
+    <ButtonsVue :go="finishStep"/>
 
     <v-layout
       align-content-center
@@ -51,6 +51,9 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpDialog from "@/views/helps/HelpMenu2.vue";
 import ButtonsVue from "./ButtonsRow.vue"
 import Table from "./Table";
@@ -64,10 +67,36 @@ export default {
     ButtonsVue
   },
 
+  data: () => ({
+    actionStartTime: new Date()
+  }),
+
+  computed: {
+    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+  },
+
   methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
     start() {
-      console.log("started");
+      this.actionStartTime = new Date()
     },
+
+    finishStep() {
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "from_action_start": Math.floor((time.getTime() - this.actionStartTime.getTime()) / 1000),
+        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
+        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_source_finish", data)
+
+      this.setClicked()
+
+      this.$router.push({ name: 'flow23' })
+    }
   },
 };
 </script>

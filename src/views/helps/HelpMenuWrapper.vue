@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="show" width="50rem" :persistent="!isShownAgain">
+    <v-dialog v-model="show" width="50rem" persistent>
       <v-card class="py-4">
         <v-card-text class="text-center py-0">
           <slot />
@@ -28,7 +28,11 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import HelpFabVue from "@/components/HelpFab.vue";
+
 export default {
   name: "HelpDialog",
 
@@ -40,11 +44,25 @@ export default {
     btnText: "Начать",
     show: true,
     isShownAgain: false,
+
+    showStart: new Date()
   }),
 
   methods: {
+    ...mapActions(useTimerStore, ["setClicked"]),
+
     clicked() {
       this.show = false;
+
+      const time = new Date()
+      const data = { 
+        "timestamp": time,
+        "reading_for": Math.floor((time.getTime() - this.showStart.getTime()) / 1000),
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_help_close", data)
+
+      this.setClicked()
 
       if (!this.isShownAgain) this.$emit("started");
     },
@@ -52,6 +70,17 @@ export default {
     showAgain() {
       this.show = true;
       this.isShownAgain = true;
+
+      const time = new Date()
+      const data = { 
+        "timestamp": time
+      }
+      console.log(data)
+      this.$metrika.reachGoal("btn_help_open", data)
+
+      this.setClicked()
+
+      this.showStart = time
     },
   },
 };
