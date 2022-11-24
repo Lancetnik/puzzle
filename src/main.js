@@ -11,7 +11,7 @@ const pinia = createPinia()
 Vue.config.productionTip = false
 
 Vue.use(VueYandexMetrika, {
-  id: 91263055,
+  id: 91364813,
   router: router,
   env: process.env.NODE_ENV
 })
