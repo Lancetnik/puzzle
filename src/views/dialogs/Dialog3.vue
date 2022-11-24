@@ -37,7 +37,7 @@ export default {
   methods: {
     clicked() {
       if (this.sqlSelect) {
-        this.$metrika.params({"sql-experience": "old"})
+        this.$metrika.params({ "sql-experience": this.sqlSelect })
         this.$emit("clicked")
       }
     },
