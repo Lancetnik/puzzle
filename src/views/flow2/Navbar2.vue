@@ -57,6 +57,7 @@ import { mapState, mapActions } from "pinia";
 import { useTimerStore } from "@/timer.store";
 
 import SuccessMenuVue from '../SuccessMenu.vue';
+import axios from 'axios';
 
 export default {
   name: "NavbarVue",
@@ -81,7 +82,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime", "stepStart"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "stepStart", "params"]),
   },
 
   methods: {
@@ -97,6 +98,11 @@ export default {
           "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
         }
         this.$metrika.reachGoal("btn_sql_finish", data)
+        axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_sql_finish",
+      });
 
         this.success = true
       } else this.clickWrong("btn_actions")
@@ -110,6 +116,12 @@ export default {
         from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
       };
       this.$metrika.reachGoal(id, data);
+
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: id,
+      });
 
       this.setClicked();
     },

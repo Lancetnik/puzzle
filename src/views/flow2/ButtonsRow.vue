@@ -45,6 +45,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useTimerStore } from "@/timer.store";
+import axios from 'axios';
 
 export default {
   name: "ButtonsVue",
@@ -66,7 +67,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "params"]),
   },
 
   methods: {
@@ -80,7 +81,11 @@ export default {
         from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
       };
       this.$metrika.reachGoal("btn_actions", data);
-
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_actions",
+      });
       this.setClicked();
     },
   }

@@ -28,10 +28,11 @@
 </template>
 
 <script>
-import { mapActions } from "pinia";
+import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "@/timer.store";
 
 import HelpFabVue from "@/components/HelpFab.vue";
+import axios from 'axios';
 
 export default {
   name: "HelpDialog",
@@ -48,6 +49,10 @@ export default {
     showStart: new Date()
   }),
 
+  computed: {
+    ...mapState(useTimerStore, ["params"]),
+  },
+
   methods: {
     ...mapActions(useTimerStore, ["setClicked"]),
 
@@ -60,7 +65,11 @@ export default {
         "reading_for": Math.floor((time.getTime() - this.showStart.getTime()) / 1000),
       }
       this.$metrika.reachGoal("btn_help_close", data)
-
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_help_close",
+      });
       this.setClicked()
 
       if (!this.isShownAgain) this.$emit("started");
@@ -75,7 +84,11 @@ export default {
         "timestamp": time
       }
       this.$metrika.reachGoal("btn_help_open", data)
-
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_help_open",
+      });
       this.setClicked()
 
       this.showStart = time

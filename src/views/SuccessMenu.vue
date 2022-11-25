@@ -36,20 +36,35 @@
 </template>
   
   <script>
+import { mapState } from "pinia";
+import { useTimerStore } from "@/timer.store";
+import axios from "axios";
+
 export default {
   name: "SuccessMenu",
 
-  props: ["value"],
+  props: ["value", "version"],
 
   data: () => ({
     estimation: null,
     finished: false,
   }),
 
+  computed: {
+    ...mapState(useTimerStore, ["params"]),
+  },
+
   methods: {
     clicked() {
-      const data = { nps: this.estimation + 1 }
+      const data = { nps: this.estimation + 1, timestamp: new Date() };
       this.$metrika.reachGoal("btn_nps", data);
+
+      axios.post("/save-report-data", {
+        type: "btn_nps",
+        ...this.params,
+        ...data,
+      });
+
       this.finished = true;
     },
   },

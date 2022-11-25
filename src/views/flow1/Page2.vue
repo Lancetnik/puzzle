@@ -102,6 +102,7 @@ import { useTimerStore } from "@/timer.store";
 
 import HelpDialog from "@/views/helps/HelpMenu2.vue";
 import TableVue from "./Table.vue";
+import axios from 'axios';
 
 export default {
   name: "Page2Vue",
@@ -116,7 +117,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "params"]),
   },
 
   methods: {
@@ -135,6 +136,12 @@ export default {
       };
       this.$metrika.reachGoal("btn_sql", data);
 
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_sql",
+      });
+
       this.setClicked();
     },
 
@@ -147,6 +154,12 @@ export default {
         "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
       }
       this.$metrika.reachGoal("btn_source_finish", data)
+
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_source_finish",
+      });
 
       this.setClicked()
 

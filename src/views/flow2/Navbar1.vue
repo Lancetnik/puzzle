@@ -87,6 +87,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useTimerStore } from "@/timer.store";
+import axios from 'axios';
 
 export default {
   name: "NavbarVue",
@@ -105,7 +106,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime", "stepStart"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "stepStart", "params"]),
   },
 
   methods: {
@@ -120,6 +121,12 @@ export default {
       };
       this.$metrika.reachGoal(id, data);
 
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: id,
+      });
+
       this.setClicked();
     },
 
@@ -132,6 +139,11 @@ export default {
         "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
       }
       this.$metrika.reachGoal("btn_source_finish", data)
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_source_finish",
+      });
 
       this.setClicked()
 

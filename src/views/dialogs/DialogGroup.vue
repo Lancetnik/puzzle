@@ -8,13 +8,15 @@
 </template>
 
 <script>
-import { mapActions } from "pinia"
+import { mapActions, mapState } from "pinia"
 import { useTimerStore } from "@/timer.store"
 
 import FirstDialog from "./Dialog1.vue"
 import SecondDialog from "./Dialog2.vue"
 import ThirdDialog from "./Dialog3.vue"
 import FourthDialog from "./Dialog4.vue"
+
+import axios from "axios"
 
 export default {
     name: "DialogGroup",
@@ -32,6 +34,10 @@ export default {
         thirdShow: false,
         fourthShow: false,
     }),
+
+    computed: {
+        ...mapState(useTimerStore, ["params"]),
+    },
 
     methods: {
         ...mapActions(useTimerStore, ["setStarted", "setClicked"]),
@@ -56,7 +62,14 @@ export default {
 
             this.setClicked()
             this.setStarted()
-            this.$metrika.reachGoal("btn_start", { "timestamp": new Date() })
+            const data = { "timestamp": new Date() }
+            this.$metrika.reachGoal("btn_start", data)
+            axios.post("/save-report-data", {
+                ...this.params,
+                ...data,
+                type: "btn_start",
+            });
+
 
             this.$emit('finished')
         }

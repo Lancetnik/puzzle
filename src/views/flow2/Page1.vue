@@ -29,8 +29,9 @@ export default {
     ButtonsVue
   },
 
-  created() {
+  mounted() {
     this.$metrika.params({"version": "new"})
+    this.setParams({"version": "new"})
   },
 
   data: () => ({
@@ -38,7 +39,7 @@ export default {
   }),
 
   methods: {
-    ...mapActions(useTimerStore, ["setStepStart"]),
+    ...mapActions(useTimerStore, ["setStepStart", "setParams"]),
 
     start() {
       this.setStepStart()

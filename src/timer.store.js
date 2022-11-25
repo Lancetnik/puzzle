@@ -6,6 +6,8 @@ export const useTimerStore = defineStore('timer', {
             startTime: localStorage.getItem("startTime") ? new Date(localStorage.getItem("startTime")) : new Date(),
             lastClick: localStorage.getItem("lastClick") ? new Date(localStorage.getItem("lastClick")) : new Date(),
             stepStart: localStorage.getItem("stepStart") ? new Date(localStorage.getItem("stepStart")) : new Date(),
+
+            params: {}
         }
     },
 
@@ -23,6 +25,13 @@ export const useTimerStore = defineStore('timer', {
         setStepStart() {
             this.stepStart = new Date()
             localStorage.setItem("stepStart", new Date())
+        },
+
+        setParams(data) {
+            this.params = {
+                ...this.params,
+                ...data
+            }
         }
     },
 })

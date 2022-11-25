@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import DialogWrapperVue from "./DialogWrapper.vue";
 
 export default {
@@ -32,9 +35,12 @@ export default {
   },
 
   methods: {
+    ...mapActions(useTimerStore, ["setParams"]),
+
     clicked() {
       if (10 < Number(this.age) && Number(this.age) < 70) {
         this.$metrika.params({ "age": this.age });
+        this.setParams({ "age": this.age, "user": this.$metrika.getClientID() })
         this.$emit("clicked");
       }
     },

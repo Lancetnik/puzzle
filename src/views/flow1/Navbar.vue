@@ -8,7 +8,12 @@
       <v-icon>mdi-puzzle-outline</v-icon>
     </v-app-bar-nav-icon>
 
-    <v-breadcrumbs :items="breadcrumbs" large dark @click="() => clickWrong('btn_puzzle')"></v-breadcrumbs>
+    <v-breadcrumbs
+      :items="breadcrumbs"
+      large
+      dark
+      @click="() => clickWrong('btn_puzzle')"
+    ></v-breadcrumbs>
 
     <v-icon> mdi-menu-down </v-icon>
 
@@ -36,6 +41,7 @@
 <script>
 import { mapState, mapActions } from "pinia";
 import { useTimerStore } from "@/timer.store";
+import axios from "axios";
 
 export default {
   name: "NavbarVue",
@@ -54,7 +60,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "params"]),
   },
 
   methods: {
@@ -72,6 +78,11 @@ export default {
         ),
       };
       this.$metrika.reachGoal(id, data);
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: id,
+      });
 
       this.setClicked();
     },

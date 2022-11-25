@@ -11,6 +11,7 @@ import { mapActions, mapState } from "pinia";
 import { useTimerStore } from "@/timer.store";
 
 import HelpMenuWrapper from "./HelpMenuWrapper.vue";
+import axios from 'axios';
 
 export default {
   name: "HelpDialog2",
@@ -20,7 +21,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "params"]),
   },
 
   methods: {
@@ -35,6 +36,11 @@ export default {
       }
       this.$metrika.reachGoal("btn_source_start", data)
 
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_source_start",
+      });
       this.setClicked()
 
       this.$emit('started')

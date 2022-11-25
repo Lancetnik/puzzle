@@ -33,10 +33,11 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapState, mapActions } from "pinia";
 import { useTimerStore } from "@/timer.store";
 
-import HelpDialog from "@/views/helps/HelpMenu1.vue"
+import HelpDialog from "@/views/helps/HelpMenu1.vue";
 import DialogGroupVue from "../dialogs/DialogGroup.vue";
 import Table from "./Table.vue";
 
@@ -46,56 +47,78 @@ export default {
   components: {
     HelpDialog,
     Table,
-    DialogGroupVue
-  },
-
-  created() {
-    this.$metrika.params({"version": "old"})
+    DialogGroupVue,
   },
 
   data: () => ({
     isDialogFinished: false,
 
-    actionStartTime: new Date()
+    actionStartTime: new Date(),
   }),
 
   computed: {
-    ...mapState(useTimerStore, ["lastClick", "startTime"]),
+    ...mapState(useTimerStore, ["lastClick", "startTime", "params"]),
   },
 
   methods: {
-    ...mapActions(useTimerStore, ["setClicked"]),
+    ...mapActions(useTimerStore, ["setClicked", "setParams"]),
 
     start() {
-      this.actionStartTime = new Date()
+      this.actionStartTime = new Date();
     },
 
-    clickWrong() {
+    async clickWrong() {
       const time = new Date();
       const data = {
         timestamp: time,
-        from_start: Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
-        from_last: Math.floor((time.getTime() - this.lastClick.getTime()) / 1000),
+        from_start: Math.floor(
+          (time.getTime() - this.startTime.getTime()) / 1000
+        ),
+        from_last: Math.floor(
+          (time.getTime() - this.lastClick.getTime()) / 1000
+        ),
       };
       this.$metrika.reachGoal("btn_actions", data);
+
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_actions",
+      });
 
       this.setClicked();
     },
 
     finishStep() {
-      const time = new Date()
-      const data = { 
-        "timestamp": time,
-        "from_action_start": Math.floor((time.getTime() - this.actionStartTime.getTime()) / 1000),
-        "from_start": Math.floor((time.getTime() - this.startTime.getTime()) / 1000),
-        "from_last":  Math.floor((time.getTime() - this.lastClick.getTime()) / 1000)
-      }
-      this.$metrika.reachGoal("btn_node_finish", data)
+      const time = new Date();
+      const data = {
+        timestamp: time,
+        from_action_start: Math.floor(
+          (time.getTime() - this.actionStartTime.getTime()) / 1000
+        ),
+        from_start: Math.floor(
+          (time.getTime() - this.startTime.getTime()) / 1000
+        ),
+        from_last: Math.floor(
+          (time.getTime() - this.lastClick.getTime()) / 1000
+        ),
+      };
+      this.$metrika.reachGoal("btn_node_finish", data);
+      axios.post("/save-report-data", {
+        ...this.params,
+        ...data,
+        type: "btn_node_finish",
+      });
 
-      this.setClicked()
+      this.setClicked();
 
-      this.$router.push({ name: 'flow12' })
-    }
-  }
+      this.$router.push({ name: "flow12" });
+    },
+  },
+
+  mounted() {
+    this.$metrika.params({ version: "old" });
+    this.setParams({ version: "old" });
+  },
 };
 </script>

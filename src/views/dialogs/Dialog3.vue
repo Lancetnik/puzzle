@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import { mapActions } from "pinia";
+import { useTimerStore } from "@/timer.store";
+
 import DialogWrapperVue from "./DialogWrapper.vue";
 
 export default {
@@ -35,9 +38,12 @@ export default {
   }),
 
   methods: {
+    ...mapActions(useTimerStore, ["setParams"]),
+
     clicked() {
       if (this.sqlSelect) {
-        this.$metrika.params({ "sql-experience": this.sqlSelect })
+        this.$metrika.params({ "sql_experience": this.sqlSelect })
+        this.setParams({ "sql_experience": this.sqlSelect })
         this.$emit("clicked")
       }
     },
